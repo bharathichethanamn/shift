@@ -59,7 +59,7 @@ const Schedule = () => {
                 const config = { headers: { Authorization: `Bearer ${user.token}` } };
                 
                 // 1. Fetch Shifts
-                const shiftsRes = await axios.get('http://localhost:5000/api/shifts', config);
+                const shiftsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/shifts`, config);
                 let shiftData = shiftsRes.data;
 
                 // Filter for Employees
@@ -86,13 +86,13 @@ const Schedule = () => {
 
                 // 2. Fetch Employees (Admin)
                 if (user.role === 'admin') {
-                    const empRes = await axios.get('http://localhost:5000/api/users', config);
+                    const empRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config);
                     console.log('Fetched employees:', empRes.data);
                     setEmployees(empRes.data);
                 }
 
                 // 3. Notifications
-                const notifRes = await axios.get('http://localhost:5000/api/notifications', config);
+                const notifRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/notifications`, config);
                 setNotifications(notifRes.data);
 
             } catch (error) {
@@ -109,7 +109,7 @@ const Schedule = () => {
             const end = new Date(`${formData.date}T${formData.endTime}`);
             const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-            await axios.post('http://localhost:5000/api/shifts', {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/shifts`, {
                 userId: formData.userId,
                 startTime: start,
                 endTime: end,

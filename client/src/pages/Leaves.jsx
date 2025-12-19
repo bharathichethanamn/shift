@@ -22,7 +22,7 @@ const Leaves = () => {
     const fetchLeaves = async () => {
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } };
-            const { data } = await axios.get('http://localhost:5000/api/leaves', config);
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/leaves`, config);
             setLeaves(data);
         } catch (error) {
             console.error('Error fetching leaves:', error);
@@ -33,7 +33,7 @@ const Leaves = () => {
         e.preventDefault();
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } };
-            await axios.post('http://localhost:5000/api/leaves', formData, config);
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/leaves`, formData, config);
             alert('Leave request submitted successfully!');
             setFormData({ startDate: '', endDate: '', reason: '', type: 'Sick Leave' });
             setShowForm(false);
@@ -46,7 +46,7 @@ const Leaves = () => {
     const handleApproval = async (leaveId, status) => {
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } };
-            await axios.put(`http://localhost:5000/api/leaves/${leaveId}`, { status }, config);
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/leaves/${leaveId}`, { status }, config);
             alert(`Leave ${status.toLowerCase()} successfully!`);
             fetchLeaves();
         } catch (error) {
@@ -192,52 +192,60 @@ const Leaves = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {leaves.map((leave) => (
-                                        <tr key={leave._id}>
-                                            {user.role === 'admin' && (
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {leave.userId?.name || 'Unknown'}
-                                                </td>
-                                            )}
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {leave.type}
+                                    {leaves.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={user.role === 'admin' ? '7' : '5'} className="px-6 py-8 text-center text-gray-500">
+                                                No leave requests found.
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {new Date(leave.startDate).toLocaleDateString()}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {new Date(leave.endDate).toLocaleDateString()}
-                                            </td>
-                                            <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-                                                {leave.reason}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(leave.status)}`}>
-                                                    {leave.status}
-                                                </span>
-                                            </td>
-                                            {user.role === 'admin' && leave.status === 'Pending' && (
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                    <div className="flex space-x-2">
-                                                        <button
-                                                            onClick={() => handleApproval(leave._id, 'Approved')}
-                                                            className="text-green-600 hover:text-green-900 flex items-center gap-1"
-                                                        >
-                                                            <CheckCircle size={16} />
-                                                            Approve
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleApproval(leave._id, 'Rejected')}
-                                                            className="text-red-600 hover:text-red-900 flex items-center gap-1"
-                                                        >
-                                                            <XCircle size={16} />
-                                                            Reject
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            )}
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        leaves.map((leave) => (
+                                            <tr key={leave._id}>
+                                                {user.role === 'admin' && (
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                        {leave.userId?.name || 'Unknown'}
+                                                    </td>
+                                                )}
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    {leave.type}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    {new Date(leave.startDate).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    {new Date(leave.endDate).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
+                                                    {leave.reason}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(leave.status)}`}>
+                                                        {leave.status}
+                                                    </span>
+                                                </td>
+                                                {user.role === 'admin' && leave.status === 'Pending' && (
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                        <div className="flex space-x-2">
+                                                            <button
+                                                                onClick={() => handleApproval(leave._id, 'Approved')}
+                                                                className="text-green-600 hover:text-green-900 flex items-center gap-1"
+                                                            >
+                                                                <CheckCircle size={16} />
+                                                                Approve
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleApproval(leave._id, 'Rejected')}
+                                                                className="text-red-600 hover:text-red-900 flex items-center gap-1"
+                                                            >
+                                                                <XCircle size={16} />
+                                                                Reject
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
