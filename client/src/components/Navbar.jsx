@@ -13,7 +13,8 @@ const Navbar = () => {
                     <>
                         {user.role === 'admin' ? (
                             <>
-                                <Link to="/dashboard" className="hover:text-gray-200 font-medium">Employees</Link>
+                                <Link to="/dashboard" className="hover:text-gray-200 font-medium">Dashboard</Link>
+                                <Link to="/employees" className="hover:text-gray-200 font-medium">Employees</Link>
                                 <Link to="/schedule" className="hover:text-gray-200 font-medium">Schedule</Link>
                                 <Link to="/leaves" className="hover:text-gray-200 font-medium">Leaves</Link>
                                 <Link to="/swaps" className="hover:text-gray-200 font-medium">Swaps</Link>
