@@ -21,13 +21,12 @@ const EmployeeList = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                // We must send the token in the header
                 const config = {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
                 };
-                const { data } = await axios.get('http://localhost:5000/api/users', config);
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config);
                 setEmployees(data);
             } catch (error) {
                 console.error("Error fetching employees", error);
@@ -48,13 +47,11 @@ const EmployeeList = () => {
             };
             
             if (editingEmployee) {
-                // Update existing employee
-                await axios.put(`http://localhost:5000/api/users/${editingEmployee._id}`, formData, config);
+                await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${editingEmployee._id}`, formData, config);
                 alert('Employee updated successfully!');
                 setEditingEmployee(null);
             } else {
-                // Create new employee
-                await axios.post('http://localhost:5000/api/auth/create-employee', {
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/create-employee`, {
                     ...formData,
                     role: 'employee'
                 }, config);
@@ -64,8 +61,7 @@ const EmployeeList = () => {
             setFormData({ name: '', email: '', password: '', department: '', designation: '', workLocation: '' });
             setShowForm(false);
             
-            // Refresh employee list
-            const { data } = await axios.get('http://localhost:5000/api/users', config);
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config);
             setEmployees(data);
         } catch (error) {
             alert(error.response?.data?.message || 'Error saving employee');
@@ -95,11 +91,10 @@ const EmployeeList = () => {
                 }
             };
             
-            await axios.delete(`http://localhost:5000/api/users/${employeeId}`, config);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/users/${employeeId}`, config);
             alert('Employee deleted successfully!');
             
-            // Refresh employee list
-            const { data } = await axios.get('http://localhost:5000/api/users', config);
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config);
             setEmployees(data);
         } catch (error) {
             alert(error.response?.data?.message || 'Error deleting employee');
@@ -123,7 +118,7 @@ const EmployeeList = () => {
                 
                 {showForm && (
                     <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                        <h3 className="text-lg font-semibold mb-4">
+                        <h3 className="text-xl font-semibold mb-4">
                             {editingEmployee ? 'Edit Employee' : 'Create New Employee'}
                         </h3>
                         <form onSubmit={handleCreateEmployee} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -175,7 +170,7 @@ const EmployeeList = () => {
                             <div className="col-span-full md:col-span-1 flex gap-2">
                                 <button
                                     type="submit"
-                                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex-1"
+                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex-1"
                                 >
                                     {editingEmployee ? 'Update Employee' : 'Create Employee'}
                                 </button>
@@ -223,9 +218,6 @@ const EmployeeList = () => {
                                                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                                             >
                                                 Edit
-                                            </button>
-                                            <button className="text-green-600 hover:text-green-800 text-sm font-medium">
-                                                Availability
                                             </button>
                                             <button 
                                                 onClick={() => handleDeleteEmployee(emp._id)}

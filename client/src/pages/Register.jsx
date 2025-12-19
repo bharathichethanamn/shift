@@ -16,9 +16,12 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow-lg">
-        <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">Create Account</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">ShiftMaster</h1>
+          <p className="text-gray-600">Create your account to get started.</p>
+        </div>
         <form onSubmit={handleSubmit}>
           
           <label className="block mb-2 font-bold text-sm">Full Name</label>
@@ -44,10 +47,19 @@ const Register = () => {
             <option value="admin">Manager (Admin)</option>
           </select>
 
-          <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
-            Register
+          <button type="submit" className="w-full px-4 py-3 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none transition-colors">
+            Create Account
           </button>
         </form>
+        
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{' '}
+            <a href="/" className="font-medium text-blue-600 hover:text-blue-500">
+              Sign in here
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
