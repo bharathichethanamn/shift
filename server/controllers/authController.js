@@ -15,12 +15,15 @@ const generateToken = (id, role) => {
 const registerUser = async (req, res) => {
     const { name, email, password, role } = req.body;
 
+    // Validation
+    if (!name || !email || !password) {
+        return res.status(400).json({ message: 'Please provide name, email, and password' });
+    }
+
     try {
         const userExists = await User.findOne({ email });
         if (userExists) return res.status(400).json({ message: 'User already exists' });
 
-        // Logic: If the person creating this user is logged in, save their ID
-        // If it's a public registration (first admin), createdBy is null
         const createdBy = req.user ? req.user.id : null; 
 
         const user = await User.create({
@@ -28,7 +31,7 @@ const registerUser = async (req, res) => {
             email,
             password,
             role: role || 'employee',
-            createdBy // <--- Saving the link here
+            createdBy
         });
 
         res.status(201).json({
@@ -39,6 +42,7 @@ const registerUser = async (req, res) => {
             token: generateToken(user._id, user.role),
         });
     } catch (error) {
+        console.error('Registration error:', error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -47,6 +51,11 @@ const registerUser = async (req, res) => {
 // @access  Public
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
+
+    // Validation
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Please provide email and password' });
+    }
 
     try {
         const user = await User.findOne({ email });
@@ -63,6 +72,7 @@ const loginUser = async (req, res) => {
             res.status(401).json({ message: 'Invalid email or password' });
         }
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: error.message });
     }
 };
