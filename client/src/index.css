@@ -124,6 +124,27 @@ body {
 .hover\:text-red-800:hover { color: #991b1b; }
 .hover\:text-blue-800:hover { color: #1e40af; }
 .text-blue-600 { color: #2563eb; }
+.border-l-4 { border-left-width: 4px; }
+.border-blue-500 { border-color: #3b82f6; }
+.border-green-500 { border-color: #10b981; }
+.border-yellow-500 { border-color: #f59e0b; }
+.border-purple-500 { border-color: #8b5cf6; }
+.bg-blue-100 { background-color: #dbeafe; }
+.bg-green-100 { background-color: #dcfce7; }
+.bg-yellow-100 { background-color: #fef3c7; }
+.bg-purple-100 { background-color: #f3e8ff; }
+.text-green-600 { color: #059669; }
+.text-yellow-600 { color: #d97706; }
+.text-purple-600 { color: #9333ea; }
+.text-3xl { font-size: 1.875rem; }
+.mt-1 { margin-top: 0.25rem; }
+.pt-4 { padding-top: 1rem; }
+.border-t { border-top-width: 1px; }
+.hover\:bg-gray-50:hover { background-color: #f9fafb; }
+.hover\:border-blue-300:hover { border-color: #93c5fd; }
+.transition-all { transition: all 0.15s ease-in-out; }
+.h-4 { height: 1rem; }
+.w-4 { width: 1rem; }
 .focus\:outline-none:focus { outline: none; }
 .focus\:ring:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); }
 .focus\:border-blue-300:focus { border-color: #93c5fd; }
