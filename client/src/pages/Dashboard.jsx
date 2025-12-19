@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/ShiftContext';
 import Navbar from '../components/Navbar';
-import { FiUsers, FiCalendar, FiClock, FiTrendingUp, FiAlertCircle, FiCheckCircle, FiBarChart3, FiActivity } from 'react-icons/fi';
+import { FiUsers, FiCalendar, FiClock, FiTrendingUp, FiAlertCircle, FiCheckCircle, FiBarChart2, FiActivity } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import axios from 'axios';
 
@@ -75,7 +75,7 @@ const Dashboard = () => {
         { title: 'Manage Employees', icon: FiUsers, link: '/employees', color: 'bg-blue-500', count: stats.totalEmployees },
         { title: 'View Schedule', icon: FiCalendar, link: '/schedule', color: 'bg-green-500', count: stats.activeShifts },
         { title: 'Leave Requests', icon: FiClock, link: '/leaves', color: 'bg-yellow-500', count: stats.pendingLeaves },
-        { title: 'Shift Analytics', icon: FiBarChart3, link: '/analytics', color: 'bg-purple-500', count: '24h' }
+        { title: 'Shift Analytics', icon: FiBarChart2, link: '/analytics', color: 'bg-purple-500', count: '24h' }
     ];
 
     const recentActivities = [
