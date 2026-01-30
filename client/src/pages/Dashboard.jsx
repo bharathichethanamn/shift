@@ -85,7 +85,7 @@ const Dashboard = () => {
                     // Create notifications from pending requests
                     const leaveNotifications = notificationPendingLeaves.map(leave => ({
                         id: `leave-${leave._id}`,
-                        action: `Leave request from ${leave.userId?.name || 'Employee'} (${leave.type})`,
+                        action: `Leave request from ${leave.userId?.name || 'Employee'}${leave.type ? ` (${leave.type})` : ''}`,
                         user: 'Leave System',
                         time: new Date(leave.createdAt).toLocaleString(),
                         type: 'warning',
