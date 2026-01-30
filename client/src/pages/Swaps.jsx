@@ -162,16 +162,23 @@ const Swaps = () => {
                                         <select
                                             value={formData.requestingShiftId}
                                             onChange={(e) => setFormData({...formData, requestingShiftId: e.target.value})}
-                                            className="w-full border border-gray-300 bg-gray-50 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 outline-none"
+                                            className="w-full border border-gray-300 bg-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 outline-none"
                                             required
                                         >
                                             <option value="">-- Select Your Shift --</option>
-                                            {myShifts.map(shift => (
-                                                <option key={shift._id} value={shift._id}>
-                                                    {new Date(shift.startTime).toLocaleDateString()} - {shift.type} ({new Date(shift.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})})
-                                                </option>
-                                            ))}
+                                            {myShifts.length === 0 ? (
+                                                <option disabled>No upcoming shifts available</option>
+                                            ) : (
+                                                myShifts.map(shift => (
+                                                    <option key={shift._id} value={shift._id}>
+                                                        {new Date(shift.startTime).toLocaleDateString()} - {shift.type} ({new Date(shift.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})})
+                                                    </option>
+                                                ))
+                                            )}
                                         </select>
+                                        {myShifts.length === 0 && (
+                                            <p className="text-xs text-gray-500 mt-1">You need upcoming shifts to request swaps.</p>
+                                        )}
                                     </div>
 
                                     <div>
@@ -188,24 +195,31 @@ const Swaps = () => {
                                                     setFormData({...formData, targetShiftId: ''});
                                                 }
                                             }}
-                                            className="w-full border border-gray-300 bg-gray-50 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 outline-none"
+                                            className="w-full border border-gray-300 bg-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 outline-none"
                                             required
                                         >
                                             <option value="">-- Select Employee & Shift --</option>
-                                            {employees.flatMap(emp => 
-                                                emp.shifts && emp.shifts.length > 0 ? 
-                                                    emp.shifts.map(shift => (
-                                                        <option key={shift._id} value={`${emp._id}|${shift._id}`}>
-                                                            {emp.name} - {new Date(shift.startTime).toLocaleDateString()} ({shift.type})
+                                            {employees.length === 0 ? (
+                                                <option disabled>Loading employees...</option>
+                                            ) : (
+                                                employees.flatMap(emp => 
+                                                    emp.shifts && emp.shifts.length > 0 ? 
+                                                        emp.shifts.map(shift => (
+                                                            <option key={shift._id} value={`${emp._id}|${shift._id}`}>
+                                                                {emp.name} - {new Date(shift.startTime).toLocaleDateString()} ({shift.type})
+                                                            </option>
+                                                        ))
+                                                    : [
+                                                        <option key={emp._id} disabled>
+                                                            {emp.name} - No available shifts
                                                         </option>
-                                                    ))
-                                                : [
-                                                    <option key={emp._id} disabled>
-                                                        {emp.name} - No available shifts
-                                                    </option>
-                                                ]
+                                                    ]
+                                                )
                                             )}
                                         </select>
+                                        {employees.length === 0 && (
+                                            <p className="text-xs text-gray-500 mt-1">No other employees found or they have no upcoming shifts.</p>
+                                        )}
                                     </div>
                                 </div>
 
