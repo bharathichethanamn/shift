@@ -142,7 +142,7 @@ const Dashboard = () => {
                             <div>
                                 <p className="text-sm font-medium" style={{color: 'white'}}>Total Employees</p>
                                 <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.totalEmployees}</p>
-                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>↗ +2 this week</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>Active workforce</p>
                             </div>
                             <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
                                 <FiUsers className="h-8 w-8" style={{color: 'white'}} />
@@ -155,7 +155,7 @@ const Dashboard = () => {
                             <div>
                                 <p className="text-sm font-medium" style={{color: 'white'}}>Active Shifts</p>
                                 <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.activeShifts}</p>
-                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>↗ 85% capacity</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>Current shifts</p>
                             </div>
                             <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
                                 <FiClock className="h-8 w-8" style={{color: 'white'}} />
@@ -181,7 +181,7 @@ const Dashboard = () => {
                             <div>
                                 <p className="text-sm font-medium" style={{color: 'white'}}>Completed Shifts</p>
                                 <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.completedShifts}</p>
-                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>↗ +12% vs last month</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>Total completed</p>
                             </div>
                             <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
                                 <FiCheckCircle className="h-8 w-8" style={{color: 'white'}} />
