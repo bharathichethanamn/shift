@@ -311,7 +311,7 @@ const Schedule = () => {
                                                 <option disabled>No employees found. Create employees first.</option>
                                             ) : (
                                                 employees.map(emp => (
-                                                    <option key={emp._id} value={emp._id}>{emp.name}</option>
+                                                    <option key={emp._id} value={emp._id}>{emp.name} - {emp.department || 'No Dept'}</option>
                                                 ))
                                             )}
                                         </select>
