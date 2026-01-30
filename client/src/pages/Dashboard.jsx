@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/ShiftContext';
 import Navbar from '../components/Navbar';
-import { FiUsers, FiCalendar, FiClock, FiTrendingUp, FiAlertCircle, FiCheckCircle, FiBarChart2, FiActivity } from 'react-icons/fi';
+import { FiUsers, FiCalendar, FiClock, FiTrendingUp, FiAlertCircle, FiCheckCircle, FiBarChart2, FiActivity, FiBell } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import axios from 'axios';
 
@@ -15,6 +15,7 @@ const Dashboard = () => {
         completedShifts: 0
     });
     const [loading, setLoading] = useState(true);
+    const [recentActivities, setRecentActivities] = useState([]);
 
     // Sample data for charts
     const weeklyShifts = [
@@ -54,12 +55,41 @@ const Dashboard = () => {
                     // Fetch employees
                     const employeesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config);
                     
+                    // Fetch shifts to get real counts
+                    const shiftsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/shifts`, config);
+                    const allShifts = shiftsRes.data;
+                    
+                    // Fetch leaves to get real counts
+                    const leavesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/leaves`, config);
+                    const pendingLeaves = leavesRes.data.filter(leave => leave.status === 'Pending').length;
+                    const approvedLeaves = leavesRes.data.filter(leave => leave.status === 'Approved').length;
+                    
+                    const now = new Date();
+                    const activeShifts = allShifts.filter(shift => new Date(shift.endTime) > now).length;
+                    const completedShifts = allShifts.filter(shift => new Date(shift.endTime) < now).length;
+                    
                     setStats({
                         totalEmployees: employeesRes.data.length,
-                        activeShifts: Math.floor(employeesRes.data.length * 0.7),
-                        pendingLeaves: Math.floor(employeesRes.data.length * 0.15),
-                        completedShifts: Math.floor(employeesRes.data.length * 8.5)
+                        activeShifts: activeShifts,
+                        pendingLeaves: approvedLeaves, // Show approved leaves instead
+                        completedShifts: completedShifts
                     });
+                    
+                    // Fetch notifications
+                    const notifRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/notifications`, config);
+                    const notifications = notifRes.data;
+                    
+                    // Convert notifications to activities format
+                    const activities = notifications.slice(0, 4).map((notif, index) => ({
+                        id: notif._id || index,
+                        action: notif.message,
+                        user: 'System',
+                        time: new Date(notif.createdAt).toLocaleString(),
+                        type: 'info',
+                        icon: FiActivity
+                    }));
+                    
+                    setRecentActivities(activities);
                 }
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
@@ -74,16 +104,10 @@ const Dashboard = () => {
     const quickActions = [
         { title: 'Manage Employees', icon: FiUsers, link: '/employees', color: 'bg-blue-500', count: stats.totalEmployees },
         { title: 'View Schedule', icon: FiCalendar, link: '/schedule', color: 'bg-green-500', count: stats.activeShifts },
-        { title: 'Leave Requests', icon: FiClock, link: '/leaves', color: 'bg-yellow-500', count: stats.pendingLeaves },
-        { title: 'Shift Analytics', icon: FiBarChart2, link: '/analytics', color: 'bg-purple-500', count: '24h' }
+        { title: 'Leave Requests', icon: FiClock, link: '/leaves', color: 'bg-yellow-500', count: stats.pendingLeaves }
     ];
 
-    const recentActivities = [
-        { id: 1, action: 'New employee registered', user: 'John Doe', time: '2 hours ago', type: 'success', icon: FiUsers },
-        { id: 2, action: 'Leave request submitted', user: 'Jane Smith', time: '4 hours ago', type: 'warning', icon: FiClock },
-        { id: 3, action: 'Shift swap approved', user: 'Mike Johnson', time: '1 day ago', type: 'success', icon: FiCheckCircle },
-        { id: 4, action: 'Schedule updated', user: 'Admin', time: '2 days ago', type: 'info', icon: FiActivity }
-    ];
+
 
     if (loading) {
         return (
@@ -112,167 +136,113 @@ const Dashboard = () => {
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" key="dashboard-cards-v2">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#6366f1', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Total Employees</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.totalEmployees}</p>
-                                <p className="text-xs text-green-600 mt-1">↗ +2 this week</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Total Employees</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.totalEmployees}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>↗ +2 this week</p>
                             </div>
-                            <div className="bg-blue-100 p-3 rounded-full">
-                                <FiUsers className="h-8 w-8 text-blue-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiUsers className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#10b981', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Active Shifts</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.activeShifts}</p>
-                                <p className="text-xs text-green-600 mt-1">↗ 85% capacity</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Active Shifts</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.activeShifts}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>↗ 85% capacity</p>
                             </div>
-                            <div className="bg-green-100 p-3 rounded-full">
-                                <FiClock className="h-8 w-8 text-green-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiClock className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#f59e0b', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Pending Leaves</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.pendingLeaves}</p>
-                                <p className="text-xs text-yellow-600 mt-1">⚠ Needs review</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Approved Leaves</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.pendingLeaves}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>✓ Approved</p>
                             </div>
-                            <div className="bg-yellow-100 p-3 rounded-full">
-                                <FiAlertCircle className="h-8 w-8 text-yellow-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiCheckCircle className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#f43f5e', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Completed Shifts</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.completedShifts}</p>
-                                <p className="text-xs text-green-600 mt-1">↗ +12% vs last month</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Completed Shifts</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.completedShifts}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>↗ +12% vs last month</p>
                             </div>
-                            <div className="bg-purple-100 p-3 rounded-full">
-                                <FiCheckCircle className="h-8 w-8 text-purple-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiCheckCircle className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                    {/* Weekly Shifts Chart */}
-                    <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Weekly Shift Overview</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={weeklyShifts}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="day" />
-                                <YAxis />
-                                <Tooltip />
-                                <Bar dataKey="shifts" fill="#3b82f6" name="Scheduled" />
-                                <Bar dataKey="completed" fill="#10b981" name="Completed" />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-
-                    {/* Department Distribution */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Department Distribution</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <PieChart>
-                                <Pie
-                                    data={departmentData}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={80}
-                                    dataKey="value"
-                                    label={({ name, value }) => `${name}: ${value}%`}
-                                >
-                                    {departmentData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </ResponsiveContainer>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Quick Actions */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="bg-white rounded-xl shadow-md p-6">
                             <h2 className="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {quickActions.map((action, index) => (
                                     <Link
                                         key={index}
                                         to={action.link}
-                                        className="flex items-center p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all hover:border-blue-300"
+                                        className="flex items-center p-4 border border-gray-200 rounded-xl hover:shadow-md transition-all hover:border-blue-300 bg-gray-50 hover:bg-white"
                                     >
-                                        <div className={`p-3 rounded-lg ${action.color} text-white mr-4`}>
+                                        <div className={`p-3 rounded-xl ${action.color} text-white mr-4 shadow-md`}>
                                             <action.icon className="h-6 w-6" />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-medium text-gray-900">{action.title}</h3>
+                                            <h3 className="font-semibold text-gray-900">{action.title}</h3>
                                             <p className="text-sm text-gray-500">
                                                 {typeof action.count === 'number' ? `${action.count} items` : action.count}
                                             </p>
                                         </div>
-                                        <div className="text-gray-400">→</div>
+                                        <div className="text-gray-400 text-xl">→</div>
                                     </Link>
                                 ))}
                             </div>
                         </div>
-
-                        {/* Monthly Trend */}
-                        <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-4">Growth Trend</h3>
-                            <ResponsiveContainer width="100%" height={200}>
-                                <LineChart data={monthlyTrend}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Line type="monotone" dataKey="employees" stroke="#3b82f6" strokeWidth={3} name="Employees" />
-                                    <Line type="monotone" dataKey="shifts" stroke="#10b981" strokeWidth={3} name="Shifts" />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
                     </div>
 
-                    {/* Recent Activities */}
+                    {/* Notifications Card */}
                     <div>
-                        <div className="bg-white rounded-lg shadow-md p-6">
-                            <h2 className="text-xl font-semibold text-gray-800 mb-6">Recent Activities</h2>
-                            <div className="space-y-4">
-                                {recentActivities.map((activity) => (
-                                    <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50">
-                                        <div className={`flex-shrink-0 p-2 rounded-full ${
-                                            activity.type === 'success' ? 'bg-green-100 text-green-600' :
-                                            activity.type === 'warning' ? 'bg-yellow-100 text-yellow-600' : 'bg-blue-100 text-blue-600'
-                                        }`}>
-                                            <activity.icon className="h-4 w-4" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                                            <p className="text-sm text-gray-600">{activity.user}</p>
-                                            <p className="text-xs text-gray-400">{activity.time}</p>
-                                        </div>
-                                    </div>
-                                ))}
+                        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
+                            <div className="p-4" style={{background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'}}>
+                                <div className="flex items-center space-x-3">
+                                    <FiBell className="text-white" size={24} />
+                                    <h3 className="font-bold text-white text-lg">Notifications</h3>
+                                </div>
                             </div>
-                            <div className="mt-4 pt-4 border-t">
-                                <Link to="/activities" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                                    View all activities →
-                                </Link>
+                            <div className="p-6" style={{backgroundColor: 'white'}}>
+                                <div className="space-y-4">
+                                    {recentActivities.slice(0, 3).map(activity => (
+                                        <div key={activity.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                                            <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                                            <p className="text-sm text-gray-700 leading-relaxed">{activity.action}</p>
+                                        </div>
+                                    ))}
+                                    {recentActivities.length === 0 && (
+                                        <div className="text-center py-8">
+                                            <FiCheckCircle className="mx-auto text-green-500 mb-2" size={32} />
+                                            <p className="text-gray-500 font-medium">All caught up!</p>
+                                            <p className="text-gray-400 text-sm">No new notifications</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

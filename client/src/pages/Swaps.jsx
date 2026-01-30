@@ -143,7 +143,7 @@ const Swaps = () => {
                         {user.role === 'employee' && (
                             <button
                                 onClick={() => setShowForm(!showForm)}
-                                className="mt-4 md:mt-0 bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg flex items-center gap-2 shadow-md transition-all"
+                                className="mt-4 md:mt-0 bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg flex items-center gap-2 shadow-md transition-colors"
                             >
                                 <Plus size={20} />
                                 {showForm ? 'Close Form' : 'New Request'}

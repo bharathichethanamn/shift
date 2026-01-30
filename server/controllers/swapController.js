@@ -95,13 +95,11 @@ const getSwapRequests = async (req, res) => {
     }
 };
 
-// @desc    Employee response to swap request
-// @route   PUT /api/swaps/:id/employee-response
+// @desc    Employee accept swap request
+// @route   PUT /api/swaps/:id/accept
 // @access  Private
-const employeeResponse = async (req, res) => {
+const employeeAccept = async (req, res) => {
     try {
-        const { response } = req.body; // 'accept' or 'reject'
-        
         const swap = await SwapRequest.findById(req.params.id)
             .populate('requestingUserId', 'name email')
             .populate('targetUserId', 'name email');
@@ -115,27 +113,15 @@ const employeeResponse = async (req, res) => {
             return res.status(403).json({ message: 'Unauthorized' });
         }
 
-        if (response === 'accept') {
-            swap.employeeResponse = 'Accepted';
-            swap.status = 'Pending Manager';
-            swap.employeeResponseDate = new Date();
-            
-            // Notify requesting employee
-            await Notification.create({
-                userId: swap.requestingUserId._id,
-                message: `${swap.targetUserId.name} accepted your shift swap request. Waiting for manager approval.`
-            });
-        } else {
-            swap.employeeResponse = 'Rejected';
-            swap.status = 'Rejected by Employee';
-            swap.employeeResponseDate = new Date();
-            
-            // Notify requesting employee
-            await Notification.create({
-                userId: swap.requestingUserId._id,
-                message: `${swap.targetUserId.name} rejected your shift swap request.`
-            });
-        }
+        swap.employeeResponse = 'Accepted';
+        swap.status = 'Pending Manager';
+        swap.employeeResponseDate = new Date();
+        
+        // Notify requesting employee
+        await Notification.create({
+            userId: swap.requestingUserId._id,
+            message: `${swap.targetUserId.name} accepted your shift swap request. Waiting for manager approval.`
+        });
 
         await swap.save();
         res.json(swap);
@@ -144,13 +130,46 @@ const employeeResponse = async (req, res) => {
     }
 };
 
-// @desc    Manager approval/rejection
-// @route   PUT /api/swaps/:id/manager-response
-// @access  Private/Admin
-const managerResponse = async (req, res) => {
+// @desc    Employee reject swap request
+// @route   PUT /api/swaps/:id/reject
+// @access  Private
+const employeeReject = async (req, res) => {
     try {
-        const { response } = req.body; // 'approve' or 'reject'
+        const swap = await SwapRequest.findById(req.params.id)
+            .populate('requestingUserId', 'name email')
+            .populate('targetUserId', 'name email');
+
+        if (!swap) {
+            return res.status(404).json({ message: 'Swap request not found' });
+        }
+
+        // Only target employee can respond
+        if (swap.targetUserId._id.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
+
+        swap.employeeResponse = 'Rejected';
+        swap.status = 'Rejected by Employee';
+        swap.employeeResponseDate = new Date();
         
+        // Notify requesting employee
+        await Notification.create({
+            userId: swap.requestingUserId._id,
+            message: `${swap.targetUserId.name} rejected your shift swap request.`
+        });
+
+        await swap.save();
+        res.json(swap);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Manager approve swap request
+// @route   PUT /api/swaps/:id/approve
+// @access  Private/Admin
+const managerApprove = async (req, res) => {
+    try {
         if (req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Admin access required' });
         }
@@ -169,41 +188,63 @@ const managerResponse = async (req, res) => {
             return res.status(400).json({ message: 'Request not ready for manager approval' });
         }
 
-        if (response === 'approve') {
-            swap.managerResponse = 'Approved';
-            swap.status = 'Approved';
-            swap.managerResponseDate = new Date();
-            
-            // Perform the actual shift swap
-            await Shift.findByIdAndUpdate(swap.requestingShiftId._id, { userId: swap.targetUserId._id });
-            await Shift.findByIdAndUpdate(swap.targetShiftId._id, { userId: swap.requestingUserId._id });
-            
-            // Notify both employees
-            await Notification.create({
-                userId: swap.requestingUserId._id,
-                message: `Your shift swap has been approved and completed!`
-            });
-            
-            await Notification.create({
-                userId: swap.targetUserId._id,
-                message: `Your shift swap has been approved and completed!`
-            });
-        } else {
-            swap.managerResponse = 'Rejected';
-            swap.status = 'Rejected by Manager';
-            swap.managerResponseDate = new Date();
-            
-            // Notify both employees
-            await Notification.create({
-                userId: swap.requestingUserId._id,
-                message: `Your shift swap request was rejected by management.`
-            });
-            
-            await Notification.create({
-                userId: swap.targetUserId._id,
-                message: `The shift swap request was rejected by management.`
-            });
+        swap.managerResponse = 'Approved';
+        swap.status = 'Approved';
+        swap.managerResponseDate = new Date();
+        
+        // Perform the actual shift swap
+        await Shift.findByIdAndUpdate(swap.requestingShiftId._id, { userId: swap.targetUserId._id });
+        await Shift.findByIdAndUpdate(swap.targetShiftId._id, { userId: swap.requestingUserId._id });
+        
+        // Notify both employees
+        await Notification.create({
+            userId: swap.requestingUserId._id,
+            message: `Your shift swap has been approved and completed!`
+        });
+        
+        await Notification.create({
+            userId: swap.targetUserId._id,
+            message: `Your shift swap has been approved and completed!`
+        });
+
+        await swap.save();
+        res.json(swap);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Manager reject swap request
+// @route   PUT /api/swaps/:id/manager-reject
+// @access  Private/Admin
+const managerReject = async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Admin access required' });
         }
+
+        const swap = await SwapRequest.findById(req.params.id)
+            .populate('requestingUserId', 'name email')
+            .populate('targetUserId', 'name email');
+
+        if (!swap) {
+            return res.status(404).json({ message: 'Swap request not found' });
+        }
+
+        swap.managerResponse = 'Rejected';
+        swap.status = 'Rejected by Manager';
+        swap.managerResponseDate = new Date();
+        
+        // Notify both employees
+        await Notification.create({
+            userId: swap.requestingUserId._id,
+            message: `Your shift swap request was rejected by management.`
+        });
+        
+        await Notification.create({
+            userId: swap.targetUserId._id,
+            message: `The shift swap request was rejected by management.`
+        });
 
         await swap.save();
         res.json(swap);
@@ -215,6 +256,8 @@ const managerResponse = async (req, res) => {
 module.exports = {
     createSwapRequest,
     getSwapRequests,
-    employeeResponse,
-    managerResponse
+    employeeAccept,
+    employeeReject,
+    managerApprove,
+    managerReject
 };

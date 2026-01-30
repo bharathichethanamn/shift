@@ -6,14 +6,13 @@ const Notification = require('../models/Notification');
 // @access  Private
 const createLeaveRequest = async (req, res) => {
     try {
-        const { startDate, endDate, reason, type } = req.body;
+        const { startDate, endDate, reason } = req.body;
         
         const leave = await LeaveRequest.create({
             userId: req.user.id,
             startDate,
             endDate,
-            reason,
-            type
+            reason
         });
 
         // Create notification for admin (find any admin)
@@ -22,7 +21,7 @@ const createLeaveRequest = async (req, res) => {
         if (admin) {
             await Notification.create({
                 userId: admin._id,
-                message: `${req.user.name} has requested ${type} from ${new Date(startDate).toLocaleDateString()} to ${new Date(endDate).toLocaleDateString()}`
+                message: `${req.user.name} has requested leave from ${new Date(startDate).toLocaleDateString()} to ${new Date(endDate).toLocaleDateString()}`
             });
         }
 
@@ -77,7 +76,7 @@ const updateLeaveStatus = async (req, res) => {
         // Create notification for employee
         await Notification.create({
             userId: leave.userId._id,
-            message: `Your ${leave.type} request has been ${status.toLowerCase()}`
+            message: `Your leave request has been ${status.toLowerCase()}`
         });
 
         res.json(leave);

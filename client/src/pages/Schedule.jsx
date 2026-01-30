@@ -133,82 +133,90 @@ const Schedule = () => {
                 
                 {/* --- HEADER SECTION --- */}
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800">
-                        {user.role === 'admin' ? 'Manager Dashboard' : 'My Schedule'}
-                    </h1>
-                    <p className="text-gray-500">Welcome back, {user.name}</p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                                {user.role === 'admin' ? 'Shift Management Center' : 'My Schedule'}
+                            </h1>
+                            <p className="text-gray-600 text-lg">Manage your team's schedules efficiently • {user.name}</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-sm text-gray-500">Today</p>
+                            <p className="text-xl font-semibold text-gray-800">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* --- ENHANCED STATS WIDGETS --- */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" key="schedule-cards-v2">
                     {user.role === 'admin' ? (
                         <>
-                            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+                            <div className="rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow" style={{background: '#6366f1'}}>
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-blue-100 text-sm font-medium">Total Employees</p>
-                                        <p className="text-3xl font-bold mt-1">{employees.length}</p>
-                                        <p className="text-blue-100 text-xs mt-2 flex items-center">
+                                        <p className="text-sm font-medium" style={{color: 'rgba(255,255,255,0.9)'}}>Total Employees</p>
+                                        <p className="text-3xl font-bold mt-1" style={{color: 'white'}}>{employees.length}</p>
+                                        <p className="text-xs mt-2 flex items-center" style={{color: 'rgba(255,255,255,0.8)'}}>
                                             <TrendingUp size={12} className="mr-1" />
                                             Active workforce
                                         </p>
                                     </div>
-                                    <Users size={32} className="text-blue-200" />
+                                    <Users size={32} style={{color: 'rgba(255,255,255,0.8)'}} />
                                 </div>
                             </div>
                             
-                            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+                            <div className="rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow" style={{background: '#8b5cf6'}}>
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-purple-100 text-sm font-medium">Total Shifts</p>
-                                        <p className="text-3xl font-bold mt-1">{shifts.length}</p>
-                                        <p className="text-purple-100 text-xs mt-2 flex items-center">
+                                        <p className="text-sm font-medium" style={{color: 'rgba(255,255,255,0.9)'}}>Total Shifts</p>
+                                        <p className="text-3xl font-bold mt-1" style={{color: 'white'}}>{shifts.length}</p>
+                                        <p className="text-xs mt-2 flex items-center" style={{color: 'rgba(255,255,255,0.8)'}}>
                                             <Activity size={12} className="mr-1" />
                                             This month
                                         </p>
                                     </div>
-                                    <Briefcase size={32} className="text-purple-200" />
+                                    <Briefcase size={32} style={{color: 'rgba(255,255,255,0.8)'}} />
                                 </div>
                             </div>
                             
-                            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+                            <div className="rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow" style={{background: '#10b981'}}>
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-green-100 text-sm font-medium">System Status</p>
-                                        <p className="text-2xl font-bold mt-1">Online</p>
-                                        <p className="text-green-100 text-xs mt-2 flex items-center">
+                                        <p className="text-sm font-medium" style={{color: 'rgba(255,255,255,0.9)'}}>System Status</p>
+                                        <p className="text-2xl font-bold mt-1" style={{color: 'white'}}>Online</p>
+                                        <p className="text-xs mt-2 flex items-center" style={{color: 'rgba(255,255,255,0.8)'}}>
                                             <CheckCircle size={12} className="mr-1" />
                                             All systems operational
                                         </p>
                                     </div>
-                                    <CheckCircle size={32} className="text-green-200" />
+                                    <CheckCircle size={32} style={{color: 'rgba(255,255,255,0.8)'}} />
                                 </div>
                             </div>
                             
-                            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow">
+                            <div className="rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow" style={{background: '#f59e0b'}}>
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-orange-100 text-sm font-medium">Pending Tasks</p>
-                                        <p className="text-3xl font-bold mt-1">{notifications.length}</p>
-                                        <p className="text-orange-100 text-xs mt-2 flex items-center">
+                                        <p className="text-sm font-medium" style={{color: 'rgba(255,255,255,0.9)'}}>Pending Tasks</p>
+                                        <p className="text-3xl font-bold mt-1" style={{color: 'white'}}>{notifications.length}</p>
+                                        <p className="text-xs mt-2 flex items-center" style={{color: 'rgba(255,255,255,0.8)'}}>
                                             <AlertCircle size={12} className="mr-1" />
                                             Requires attention
                                         </p>
                                     </div>
-                                    <Bell size={32} className="text-orange-200" />
+                                    <Bell size={32} style={{color: 'rgba(255,255,255,0.8)'}} />
                                 </div>
                             </div>
                         </>
                     ) : (
                         <>
                             {/* Enhanced Next Shift Widget */}
-                            <div className="lg:col-span-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl p-8 text-white shadow-lg hover:shadow-xl transition-shadow">
+                            <div className="lg:col-span-3 rounded-xl p-8 text-white shadow-lg hover:shadow-xl transition-shadow" style={{background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'}}>
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center space-x-3">
-                                        <Clock className="text-indigo-200" size={28} />
-                                        <h3 className="font-bold text-xl text-indigo-100 uppercase tracking-wider">Upcoming Shift</h3>
+                                        <Clock className="text-white" size={28} />
+                                        <h3 className="font-bold text-xl text-white uppercase tracking-wider">Upcoming Shift</h3>
                                     </div>
-                                    <ChevronRight className="text-indigo-200" size={24} />
+                                    <ChevronRight className="text-white" size={24} />
                                 </div>
                                 {nextShift ? (
                                     <div className="space-y-4">
@@ -216,7 +224,7 @@ const Schedule = () => {
                                             <h2 className="text-4xl font-bold mb-2">
                                                 {new Date(nextShift.startTime).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                                             </h2>
-                                            <p className="text-indigo-100 text-xl font-medium">
+                                            <p className="text-white text-xl font-medium">
                                                 {moment(nextShift.startTime).format('h:mm A')} - {moment(nextShift.endTime).format('h:mm A')}
                                             </p>
                                         </div>
@@ -232,24 +240,24 @@ const Schedule = () => {
                                 ) : (
                                     <div className="text-center py-8">
                                         <p className="text-2xl font-medium mb-2">No upcoming shifts scheduled</p>
-                                        <p className="text-indigo-200">Enjoy your break! 🌴</p>
+                                        <p className="text-white">Enjoy your break! 🌴</p>
                                     </div>
                                 )}
                             </div>
                             
                             {/* Enhanced Notification Widget */}
-                            <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-                                <div className="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
+                            <div className="rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow" style={{background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'}}>
+                                <div className="p-4">
                                     <div className="flex items-center space-x-3">
                                         <Bell className="text-white" size={24} />
                                         <h3 className="font-bold text-white text-lg">Notifications</h3>
                                     </div>
                                 </div>
-                                <div className="p-6">
+                                <div className="p-6" style={{backgroundColor: 'white'}}>
                                     <div className="space-y-4">
                                         {notifications.slice(0, 3).map(note => (
                                             <div key={note._id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                                                <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
                                                 <p className="text-sm text-gray-700 leading-relaxed">{note.message}</p>
                                             </div>
                                         ))}
@@ -273,24 +281,28 @@ const Schedule = () => {
                     {/* LEFT COLUMN: ENHANCED ADMIN FORM */}
                     {user.role === 'admin' && (
                         <div className="w-full lg:w-1/3">
-                            <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden sticky top-4">
-                                <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6">
+                            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden sticky top-4">
+                                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
                                     <div className="flex items-center space-x-3">
-                                        <PlusCircle className="text-white" size={24} />
-                                        <h2 className="text-xl font-bold text-white">Assign New Shift</h2>
+                                        <div className="p-2 bg-white bg-opacity-20 rounded-lg">
+                                            <PlusCircle className="text-white" size={24} />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-xl font-bold text-white">Create New Shift</h2>
+                                            <p className="text-blue-100 text-sm mt-1">Assign shifts to your team members</p>
+                                        </div>
                                     </div>
-                                    <p className="text-blue-100 text-sm mt-2">Schedule shifts for your team members</p>
                                 </div>
-                                <div className="p-6">
+                                <div className="p-6 bg-gray-50">
                                 
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <div>
-                                        <label className="text-sm font-semibold text-gray-700 block mb-2 flex items-center">
-                                            <Users size={16} className="mr-2 text-blue-500" />
-                                            Employee
+                                        <label className="text-sm font-bold text-gray-700 block mb-3 flex items-center">
+                                            <Users size={16} className="mr-2 text-blue-600" />
+                                            Select Employee
                                         </label>
                                         <select 
-                                            className="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                                            className="w-full bg-white border-2 border-gray-200 rounded-xl p-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all shadow-sm"
                                             onChange={(e) => setFormData({...formData, userId: e.target.value})}
                                             required
                                         >
@@ -299,23 +311,28 @@ const Schedule = () => {
                                                 <option disabled>No employees found. Create employees first.</option>
                                             ) : (
                                                 employees.map(emp => (
-                                                    <option key={emp._id} value={emp._id}>{emp.name}</option>
+                                                    <option key={emp._id} value={emp._id}>{emp.name} - {emp.department || 'No Dept'}</option>
                                                 ))
                                             )}
                                         </select>
                                         {employees.length === 0 && (
-                                            <p className="text-sm text-red-500 mt-1">No employees available. Please create employees first in the Employee List page.</p>
+                                            <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                <p className="text-sm text-red-600 flex items-center">
+                                                    <AlertCircle size={16} className="mr-2" />
+                                                    No employees available. Please create employees first.
+                                                </p>
+                                            </div>
                                         )}
                                     </div>
 
                                     <div>
-                                        <label className="text-sm font-semibold text-gray-700 block mb-2 flex items-center">
-                                            <CalIcon size={16} className="mr-2 text-blue-500" />
-                                            Date
+                                        <label className="text-sm font-bold text-gray-700 block mb-3 flex items-center">
+                                            <CalIcon size={16} className="mr-2 text-blue-600" />
+                                            Shift Date
                                         </label>
                                         <input 
                                             type="date" 
-                                            className="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                                            className="w-full bg-white border-2 border-gray-200 rounded-xl p-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all shadow-sm"
                                             onChange={(e) => setFormData({...formData, date: e.target.value})} 
                                             required 
                                         />
@@ -323,25 +340,25 @@ const Schedule = () => {
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-sm font-semibold text-gray-700 block mb-2 flex items-center">
-                                                <Clock size={16} className="mr-2 text-blue-500" />
+                                            <label className="text-sm font-bold text-gray-700 block mb-3 flex items-center">
+                                                <Clock size={16} className="mr-2 text-blue-600" />
                                                 Start Time
                                             </label>
                                             <input 
                                                 type="time" 
-                                                className="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                                                className="w-full bg-white border-2 border-gray-200 rounded-xl p-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all shadow-sm"
                                                 onChange={(e) => setFormData({...formData, startTime: e.target.value})} 
                                                 required 
                                             />
                                         </div>
                                         <div>
-                                            <label className="text-sm font-semibold text-gray-700 block mb-2 flex items-center">
-                                                <Clock size={16} className="mr-2 text-blue-500" />
+                                            <label className="text-sm font-bold text-gray-700 block mb-3 flex items-center">
+                                                <Clock size={16} className="mr-2 text-blue-600" />
                                                 End Time
                                             </label>
                                             <input 
                                                 type="time" 
-                                                className="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                                                className="w-full bg-white border-2 border-gray-200 rounded-xl p-4 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all shadow-sm"
                                                 onChange={(e) => setFormData({...formData, endTime: e.target.value})} 
                                                 required 
                                             />
@@ -349,25 +366,26 @@ const Schedule = () => {
                                     </div>
 
                                     <div>
-                                        <label className="text-sm font-semibold text-gray-700 block mb-3 flex items-center">
-                                            <Briefcase size={16} className="mr-2 text-blue-500" />
+                                        <label className="text-sm font-bold text-gray-700 block mb-4 flex items-center">
+                                            <Briefcase size={16} className="mr-2 text-blue-600" />
                                             Shift Type
                                         </label>
                                         <div className="grid grid-cols-3 gap-3">
                                             {[
-                                                { type: 'Morning', color: 'from-yellow-400 to-orange-400' },
-                                                { type: 'Afternoon', color: 'from-orange-400 to-red-400' },
-                                                { type: 'Night', color: 'from-purple-400 to-indigo-400' }
+                                                { type: 'Morning', color: '#f59e0b' },
+                                                { type: 'Afternoon', color: '#f97316' },
+                                                { type: 'Night', color: '#8b5cf6' }
                                             ].map(({ type, color }) => (
                                                 <button
                                                     key={type}
                                                     type="button"
                                                     onClick={() => setFormData({...formData, type})}
-                                                    className={`py-3 px-2 text-sm font-medium rounded-lg border-2 transition-all ${
+                                                    className={`py-4 px-3 text-sm font-bold rounded-xl border-2 transition-all transform hover:scale-105 ${
                                                         formData.type === type 
-                                                        ? `bg-gradient-to-r ${color} text-white border-transparent shadow-lg transform scale-105` 
+                                                        ? 'text-white border-transparent shadow-lg scale-105' 
                                                         : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
                                                     }`}
+                                                    style={formData.type === type ? {backgroundColor: color} : {}}
                                                 >
                                                     {type}
                                                 </button>
@@ -377,7 +395,7 @@ const Schedule = () => {
 
                                     <button 
                                         type="submit" 
-                                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 transform hover:scale-105"
+                                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 transform hover:scale-105"
                                     >
                                         <CheckCircle size={20} /> 
                                         Assign Shift
@@ -390,25 +408,30 @@ const Schedule = () => {
 
                     {/* RIGHT COLUMN: ENHANCED CALENDAR */}
                     <div className={`w-full ${user.role === 'admin' ? 'lg:w-2/3' : 'lg:w-full'}`}>
-                        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden h-full">
-                            <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 border-b border-gray-200">
+                        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden h-full">
+                            <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-6 border-b border-gray-200">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-3">
-                                        <CalIcon className="text-blue-500" size={24} />
-                                        <h2 className="text-xl font-bold text-gray-800">Schedule Calendar</h2>
+                                        <div className="p-2 bg-blue-100 rounded-lg">
+                                            <CalIcon className="text-blue-600" size={24} />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-xl font-bold text-gray-800">Team Schedule Calendar</h2>
+                                            <p className="text-gray-600 text-sm">Manage and view all team shifts</p>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <div className="flex items-center space-x-1">
-                                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                                            <span>Morning</span>
+                                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-4 h-4 rounded-full" style={{backgroundColor: '#f59e0b'}}></div>
+                                            <span className="font-medium">Morning</span>
                                         </div>
-                                        <div className="flex items-center space-x-1">
-                                            <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                                            <span>Afternoon</span>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-4 h-4 rounded-full" style={{backgroundColor: '#f97316'}}></div>
+                                            <span className="font-medium">Afternoon</span>
                                         </div>
-                                        <div className="flex items-center space-x-1">
-                                            <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
-                                            <span>Night</span>
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-4 h-4 rounded-full" style={{backgroundColor: '#8b5cf6'}}></div>
+                                            <span className="font-medium">Night</span>
                                         </div>
                                     </div>
                                 </div>
@@ -427,15 +450,15 @@ const Schedule = () => {
                                     onView={setView}
                                     eventPropGetter={(event) => {
                                         const type = event.resource?.type || 'Morning';
-                                        let bgColor = '#3b82f6';
-                                        let borderColor = '#2563eb';
+                                        let bgColor = '#f59e0b';
+                                        let borderColor = '#d97706';
                                         
                                         if (type === 'Afternoon') {
-                                            bgColor = '#f59e0b';
-                                            borderColor = '#d97706';
+                                            bgColor = '#f97316';
+                                            borderColor = '#ea580c';
                                         } else if (type === 'Night') {
-                                            bgColor = '#7c3aed';
-                                            borderColor = '#6d28d9';
+                                            bgColor = '#8b5cf6';
+                                            borderColor = '#7c3aed';
                                         }
                                         
                                         return { 
@@ -446,8 +469,8 @@ const Schedule = () => {
                                                 color: 'white',
                                                 padding: '4px 8px',
                                                 fontSize: '0.875rem',
-                                                fontWeight: '500',
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                fontWeight: '600',
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                                             } 
                                         };
                                     }}

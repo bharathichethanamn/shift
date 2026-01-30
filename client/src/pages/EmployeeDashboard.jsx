@@ -124,7 +124,7 @@ const EmployeeDashboard = () => {
                 {/* Next Shift Card */}
                 {nextShift && (
                     <div className="mb-8">
-                        <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl p-6 text-white shadow-lg">
+                        <div className="rounded-xl p-6 text-white shadow-lg" style={{background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'}}>
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center space-x-3">
                                     <FiClock className="text-white" size={28} />
@@ -133,24 +133,24 @@ const EmployeeDashboard = () => {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
-                                    <p className="text-blue-100 text-sm">Date</p>
-                                    <p className="text-xl font-bold">
+                                    <p className="text-sm font-medium" style={{color: 'rgba(255,255,255,0.9)'}}>Date</p>
+                                    <p className="text-xl font-bold text-white">
                                         {moment(nextShift.startTime).format('MMM DD, YYYY')}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-blue-100 text-sm">Time</p>
-                                    <p className="text-xl font-bold">
+                                    <p className="text-sm font-medium" style={{color: 'rgba(255,255,255,0.9)'}}>Time</p>
+                                    <p className="text-xl font-bold text-white">
                                         {moment(nextShift.startTime).format('h:mm A')} - {moment(nextShift.endTime).format('h:mm A')}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-blue-100 text-sm">Type</p>
-                                    <p className="text-xl font-bold">{nextShift.type} Shift</p>
+                                    <p className="text-sm font-medium" style={{color: 'rgba(255,255,255,0.9)'}}>Type</p>
+                                    <p className="text-xl font-bold text-white">{nextShift.type} Shift</p>
                                 </div>
                             </div>
                             <div className="mt-4">
-                                <span className="bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-medium">
+                                <span className="px-4 py-2 rounded-full text-sm font-medium" style={{backgroundColor: 'rgba(255,255,255,0.2)', color: 'white'}}>
                                     {moment(nextShift.startTime).fromNow()}
                                 </span>
                             </div>
@@ -160,119 +160,81 @@ const EmployeeDashboard = () => {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#6366f1', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Total Shifts</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.totalShifts}</p>
-                                <p className="text-xs text-blue-600 mt-1">All time</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Total Shifts</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.totalShifts}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>All time</p>
                             </div>
-                            <div className="bg-blue-100 p-3 rounded-full">
-                                <FiCalendar className="h-8 w-8 text-blue-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiCalendar className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#10b981', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Upcoming Shifts</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.upcomingShifts}</p>
-                                <p className="text-xs text-green-600 mt-1">This month</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Upcoming Shifts</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.upcomingShifts}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>This month</p>
                             </div>
-                            <div className="bg-green-100 p-3 rounded-full">
-                                <FiClock className="h-8 w-8 text-green-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiClock className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#8b5cf6', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Completed Shifts</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.completedShifts}</p>
-                                <p className="text-xs text-purple-600 mt-1">Great job!</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Completed Shifts</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.completedShifts}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>Great job!</p>
                             </div>
-                            <div className="bg-purple-100 p-3 rounded-full">
-                                <FiCheckCircle className="h-8 w-8 text-purple-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiCheckCircle className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+                    <div className="rounded-xl shadow-md p-6 hover:shadow-lg transition-all" style={{background: '#f59e0b', color: 'white'}}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-gray-600">Pending Leaves</p>
-                                <p className="text-3xl font-bold text-gray-900">{stats.pendingLeaves}</p>
-                                <p className="text-xs text-orange-600 mt-1">Awaiting approval</p>
+                                <p className="text-sm font-medium" style={{color: 'white'}}>Pending Leaves</p>
+                                <p className="text-3xl font-bold" style={{color: 'white'}}>{stats.pendingLeaves}</p>
+                                <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.8)'}}>Awaiting approval</p>
                             </div>
-                            <div className="bg-orange-100 p-3 rounded-full">
-                                <FiAlertCircle className="h-8 w-8 text-orange-500" />
+                            <div className="p-3 rounded-full" style={{backgroundColor: 'rgba(255,255,255,0.2)'}}>
+                                <FiAlertCircle className="h-8 w-8" style={{color: 'white'}} />
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                    {/* Weekly Hours Chart */}
-                    <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Weekly Hours</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={weeklyHours}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="day" />
-                                <YAxis />
-                                <Tooltip />
-                                <Bar dataKey="hours" fill="#3b82f6" />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-
-                    {/* Shift Type Distribution */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Shift Types</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <PieChart>
-                                <Pie
-                                    data={shiftTypeData}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={80}
-                                    dataKey="value"
-                                    label={({ name, value }) => `${name}: ${value}%`}
-                                >
-                                    {shiftTypeData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                            </PieChart>
-                        </ResponsiveContainer>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Quick Actions */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="bg-white rounded-xl shadow-md p-6">
                             <h2 className="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {quickActions.map((action, index) => (
                                     <Link
                                         key={index}
                                         to={action.link}
-                                        className="flex items-center p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all hover:border-blue-300"
+                                        className="flex items-center p-4 border border-gray-200 rounded-xl hover:shadow-md transition-all hover:border-blue-300 bg-gray-50 hover:bg-white"
                                     >
-                                        <div className={`p-3 rounded-lg ${action.color} text-white mr-4`}>
+                                        <div className={`p-3 rounded-xl ${action.color} text-white mr-4 shadow-md`}>
                                             <action.icon className="h-6 w-6" />
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-medium text-gray-900">{action.title}</h3>
+                                            <h3 className="font-semibold text-gray-900">{action.title}</h3>
                                             <p className="text-sm text-gray-500">
                                                 {typeof action.count === 'number' ? `${action.count} items` : action.count}
                                             </p>
                                         </div>
-                                        <div className="text-gray-400">→</div>
+                                        <div className="text-gray-400 text-xl">→</div>
                                     </Link>
                                 ))}
                             </div>
@@ -281,12 +243,12 @@ const EmployeeDashboard = () => {
 
                     {/* Recent Shifts */}
                     <div>
-                        <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="bg-white rounded-xl shadow-md p-6">
                             <h2 className="text-xl font-semibold text-gray-800 mb-6">Recent Shifts</h2>
                             <div className="space-y-4">
                                 {recentShifts.length > 0 ? (
                                     recentShifts.map((shift) => (
-                                        <div key={shift._id} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
+                                        <div key={shift._id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                                             <div className={`flex-shrink-0 p-2 rounded-full ${
                                                 shift.type === 'Morning' ? 'bg-blue-100 text-blue-600' :
                                                 shift.type === 'Afternoon' ? 'bg-orange-100 text-orange-600' : 'bg-purple-100 text-purple-600'

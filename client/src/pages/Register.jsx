@@ -25,21 +25,21 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           
           <label className="block mb-2 font-bold text-sm">Full Name</label>
-          <input className="w-full mb-3 p-2 border rounded" required 
+          <input className="w-full mb-3 p-3 border rounded text-base" required 
             onChange={e => setName(e.target.value)} />
 
           <label className="block mb-2 font-bold text-sm">Email</label>
-          <input className="w-full mb-3 p-2 border rounded" type="email" required 
+          <input className="w-full mb-3 p-3 border rounded text-base" type="email" required 
             onChange={e => setEmail(e.target.value)} />
 
           <label className="block mb-2 font-bold text-sm">Password</label>
-          <input className="w-full mb-3 p-2 border rounded" type="password" required 
+          <input className="w-full mb-3 p-3 border rounded text-base" type="password" required 
             onChange={e => setPassword(e.target.value)} />
 
           {/* --- ROLE SELECTION --- */}
           <label className="block mb-2 font-bold text-sm">I am a:</label>
           <select 
-            className="w-full mb-6 p-2 border rounded bg-white"
+            className="w-full mb-6 p-3 border rounded bg-white text-base"
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >

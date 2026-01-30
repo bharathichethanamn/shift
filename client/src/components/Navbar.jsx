@@ -21,6 +21,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
+                                <Link to="/dashboard" className="hover:text-gray-200 font-medium">Dashboard</Link>
                                 <Link to="/schedule" className="hover:text-gray-200 font-medium">My Schedule</Link>
                                 <Link to="/leaves" className="hover:text-gray-200 font-medium">My Leaves</Link>
                                 <Link to="/swaps" className="hover:text-gray-200 font-medium">Shift Swaps</Link>
