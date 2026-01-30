@@ -209,26 +209,33 @@ const Swaps = () => {
                                             required
                                         >
                                             <option value="">-- Select Employee & Shift --</option>
-                                            {employees.length === 0 ? (
-                                                <option disabled>Loading employees...</option>
-                                            ) : (
-                                                employees.flatMap(emp => 
-                                                    emp.shifts && emp.shifts.length > 0 ? 
-                                                        emp.shifts.map(shift => (
-                                                            <option key={shift._id} value={`${emp._id}|${shift._id}`}>
-                                                                {emp.name} - {new Date(shift.startTime).toLocaleDateString()} ({shift.type})
-                                                            </option>
-                                                        ))
-                                                    : [
-                                                        <option key={emp._id} disabled>
-                                                            {emp.name} - No available shifts
+                                        {employees.length === 0 ? (
+                                            <option disabled>No other employees found. Create employees first.</option>
+                                        ) : employees.every(emp => !emp.shifts || emp.shifts.length === 0) ? (
+                                            <option disabled>Other employees have no upcoming shifts.</option>
+                                        ) : (
+                                            employees.flatMap(emp => 
+                                                emp.shifts && emp.shifts.length > 0 ? 
+                                                    emp.shifts.map(shift => (
+                                                        <option key={shift._id} value={`${emp._id}|${shift._id}`}>
+                                                            {emp.name} - {new Date(shift.startTime).toLocaleDateString()} ({shift.type})
                                                         </option>
-                                                    ]
-                                                )
-                                            )}
+                                                    ))
+                                                : [
+                                                    <option key={emp._id} disabled>
+                                                        {emp.name} - No available shifts
+                                                    </option>
+                                                ]
+                                            )
+                                        )}
                                         </select>
                                         {employees.length === 0 && (
-                                            <p className="text-xs text-gray-500 mt-1">No other employees found or they have no upcoming shifts.</p>
+                                            <p className="text-xs text-red-500 mt-1">
+                                                <strong>To use shift swaps:</strong><br/>
+                                                1. Create other employees in Employee List<br/>
+                                                2. Assign future shifts to them in Schedule<br/>
+                                                3. Both you and other employees need upcoming shifts
+                                            </p>
                                         )}
                                     </div>
                                 </div>
