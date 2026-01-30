@@ -21,6 +21,7 @@ function App() {
         {/* <-- New Route --> */}
         <Route path="/leaves" element={<Leaves />} /> 
         <Route path="/swaps" element={<Swaps />} />
+        <Route path="/profile" element={<EmployeeList />} />
       </Routes>
     </AuthProvider>
   );
