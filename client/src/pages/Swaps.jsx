@@ -28,7 +28,7 @@ const Swaps = () => {
             const swapsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/swaps`, config);
             setRequests(swapsRes.data);
 
-            if (user.role === 'employee') {
+            if (user?.role === 'employee') {
                 const shiftsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/shifts`, config);
                 console.log('All shifts:', shiftsRes.data);
                 
