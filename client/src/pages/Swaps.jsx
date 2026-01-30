@@ -220,25 +220,15 @@ const Swaps = () => {
                                             required
                                         >
                                             <option value="">-- Select Employee & Shift --</option>
-                                        {employees.length === 0 ? (
-                                            <option disabled>No other employees found. Create employees first.</option>
-                                        ) : employees.every(emp => !emp.shifts || emp.shifts.length === 0) ? (
-                                            <option disabled>Other employees have no upcoming shifts.</option>
-                                        ) : (
-                                            employees.flatMap(emp => 
-                                                emp.shifts && emp.shifts.length > 0 ? 
-                                                    emp.shifts.map(shift => (
-                                                        <option key={shift._id} value={`${emp._id}|${shift._id}`}>
-                                                            {emp.name} - {new Date(shift.startTime).toLocaleDateString()} ({shift.type})
-                                                        </option>
-                                                    ))
-                                                : [
-                                                    <option key={emp._id} disabled>
-                                                        {emp.name} - No available shifts
+                                            {employees.length === 0 ? (
+                                                <option disabled>No employees found</option>
+                                            ) : (
+                                                employees.map(emp => (
+                                                    <option key={emp._id} value={`${emp._id}|dummy`}>
+                                                        {emp.name} ({emp.department || 'No Dept'}) - {emp.shifts?.length || 0} shifts
                                                     </option>
-                                                ]
-                                            )
-                                        )}
+                                                ))
+                                            )}
                                         </select>
                                         {employees.length === 0 && (
                                             <p className="text-xs text-red-500 mt-1">
