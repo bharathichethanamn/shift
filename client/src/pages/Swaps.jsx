@@ -223,11 +223,19 @@ const Swaps = () => {
                                             {employees.length === 0 ? (
                                                 <option disabled>No employees found</option>
                                             ) : (
-                                                employees.map(emp => (
-                                                    <option key={emp._id} value={`${emp._id}|dummy`}>
-                                                        {emp.name} ({emp.department || 'No Dept'}) - {emp.shifts?.length || 0} shifts
-                                                    </option>
-                                                ))
+                                                employees.flatMap(emp => 
+                                                    emp.shifts && emp.shifts.length > 0 ? 
+                                                        emp.shifts.map(shift => (
+                                                            <option key={shift._id} value={`${emp._id}|${shift._id}`}>
+                                                                {emp.name} ({emp.department || 'No Dept'}) - {new Date(shift.startTime).toLocaleDateString()} {new Date(shift.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - {new Date(shift.endTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ({shift.type})
+                                                            </option>
+                                                        ))
+                                                    : [
+                                                        <option key={emp._id} disabled>
+                                                            {emp.name} ({emp.department || 'No Dept'}) - No available shifts
+                                                        </option>
+                                                    ]
+                                                )
                                             )}
                                         </select>
                                         {employees.length === 0 && (
