@@ -68,4 +68,27 @@ const deleteEmployee = async (req, res) => {
     }
 };
 
-module.exports = { getEmployees, updateEmployee, deleteEmployee };
+// @desc    Update own profile
+// @route   PUT /api/users/profile
+// @access  Private
+const updateOwnProfile = async (req, res) => {
+    try {
+        const { name, department, designation, workLocation } = req.body;
+        
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            { name, department, designation, workLocation },
+            { new: true }
+        ).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getEmployees, updateEmployee, deleteEmployee, updateOwnProfile };

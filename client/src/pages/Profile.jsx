@@ -39,7 +39,7 @@ const Profile = () => {
                 }
             };
             
-            await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${user._id}`, profileData, config);
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/users/profile`, profileData, config);
             alert('Profile updated successfully!');
             setIsEditing(false);
         } catch (error) {
