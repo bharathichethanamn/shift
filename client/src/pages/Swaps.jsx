@@ -42,6 +42,9 @@ const Swaps = () => {
                 setMyShifts(myShiftsData);
 
                 const usersRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config);
+                console.log('Current user:', user);
+                console.log('Users API response:', usersRes);
+                console.log('All users:', usersRes.data);
                 const allShiftsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/shifts/all`, config);
                 console.log('All users:', usersRes.data);
                 console.log('All shifts for swaps:', allShiftsRes.data);
