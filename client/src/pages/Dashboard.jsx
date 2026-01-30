@@ -76,11 +76,11 @@ const Dashboard = () => {
                     });
                     
                     // Fetch leaves and swaps for notifications
-                    const leavesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/leaves`, config);
-                    const swapsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/swaps`, config);
+                    const notificationLeavesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/leaves`, config);
+                    const notificationSwapsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/swaps`, config);
                     
-                    const pendingLeaves = leavesRes.data.filter(leave => leave.status === 'Pending');
-                    const pendingSwaps = swapsRes.data.filter(swap => swap.status === 'Pending Manager');
+                    const pendingLeaves = notificationLeavesRes.data.filter(leave => leave.status === 'Pending');
+                    const pendingSwaps = notificationSwapsRes.data.filter(swap => swap.status === 'Pending Manager');
                     
                     // Create notifications from pending requests
                     const leaveNotifications = pendingLeaves.map(leave => ({
