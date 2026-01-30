@@ -117,7 +117,9 @@ const EmployeeDashboard = () => {
                         Welcome back, {user?.name}! 👋
                     </h1>
                     <p className="text-gray-600">
-                        Here's your personal dashboard for {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.
+                        {user?.department && (
+                            <span className="font-medium text-blue-600">{user.department} Department</span>
+                        )} • Here's your personal dashboard for {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.
                     </p>
                 </div>
 
