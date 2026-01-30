@@ -30,24 +30,34 @@ const Swaps = () => {
 
             if (user.role === 'employee') {
                 const shiftsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/shifts`, config);
-                const myShiftsData = shiftsRes.data.filter(s => 
-                    new Date(s.startTime) > new Date()
-                );
+                console.log('All shifts:', shiftsRes.data);
+                
+                const myShiftsData = shiftsRes.data.filter(s => {
+                    const isMyShift = s.userId && (String(s.userId._id) === String(user._id) || String(s.userId) === String(user._id));
+                    const isFuture = new Date(s.startTime) > new Date();
+                    console.log('Shift check:', s, 'isMyShift:', isMyShift, 'isFuture:', isFuture);
+                    return isMyShift && isFuture;
+                });
+                console.log('My shifts:', myShiftsData);
                 setMyShifts(myShiftsData);
 
                 const usersRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, config);
                 const allShiftsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/shifts/all`, config);
+                console.log('All users:', usersRes.data);
+                console.log('All shifts for swaps:', allShiftsRes.data);
                 
                 const otherEmployees = usersRes.data.filter(emp => 
                     emp._id !== user._id &&
                     emp.role === 'employee'
                 ).map(emp => {
-                    const empShifts = allShiftsRes.data.filter(s => 
-                        s.userId && String(s.userId._id) === String(emp._id) &&
-                        new Date(s.startTime) > new Date()
-                    );
+                    const empShifts = allShiftsRes.data.filter(s => {
+                        const isEmpShift = s.userId && (String(s.userId._id) === String(emp._id) || String(s.userId) === String(emp._id));
+                        const isFuture = new Date(s.startTime) > new Date();
+                        return isEmpShift && isFuture;
+                    });
                     return { ...emp, shifts: empShifts };
                 });
+                console.log('Other employees with shifts:', otherEmployees);
                 setEmployees(otherEmployees);
             }
         } catch (error) {
