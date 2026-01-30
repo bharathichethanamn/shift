@@ -147,10 +147,10 @@ const Swaps = () => {
                                 Shift Swaps
                             </h1>
                             <p className="text-gray-500 mt-1">
-                                {user.role === 'admin' ? 'Approve or reject employee swap requests.' : 'Trade shifts with your colleagues.'}
+                                {user?.role === 'admin' ? 'Approve or reject employee swap requests.' : 'Trade shifts with your colleagues.'}
                             </p>
                         </div>
-                        {user.role === 'employee' && (
+                        {user?.role === 'employee' && (
                             <button
                                 onClick={() => setShowForm(!showForm)}
                                 className="mt-4 md:mt-0 bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg flex items-center gap-2 shadow-md transition-colors"
@@ -161,7 +161,7 @@ const Swaps = () => {
                         )}
                     </div>
 
-                    {showForm && user.role === 'employee' && (
+                    {showForm && user?.role === 'employee' && (
                         <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-100">
                             <h2 className="text-xl font-bold mb-4 text-gray-700">Create New Request</h2>
                             
@@ -300,7 +300,7 @@ const Swaps = () => {
                                         requests.map((req) => {
                                             const isTargetEmployee = req.targetUserId?._id === user._id;
                                             const canEmployeeRespond = isTargetEmployee && req.status === 'Pending Employee';
-                                            const canManagerRespond = user.role === 'admin' && req.status === 'Pending Manager';
+                                            const canManagerRespond = user?.role === 'admin' && req.status === 'Pending Manager';
                                             
                                             return (
                                                 <tr key={req._id} className="hover:bg-gray-50 transition-colors">
