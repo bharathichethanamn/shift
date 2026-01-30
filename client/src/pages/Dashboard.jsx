@@ -75,21 +75,34 @@ const Dashboard = () => {
                         completedShifts: completedShifts
                     });
                     
-                    // Fetch notifications
-                    const notifRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/notifications`, config);
-                    const notifications = notifRes.data;
+                    // Fetch leaves and swaps for notifications
+                    const leavesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/leaves`, config);
+                    const swapsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/swaps`, config);
                     
-                    // Convert notifications to activities format
-                    const activities = notifications.slice(0, 4).map((notif, index) => ({
-                        id: notif._id || index,
-                        action: notif.message,
-                        user: 'System',
-                        time: new Date(notif.createdAt).toLocaleString(),
+                    const pendingLeaves = leavesRes.data.filter(leave => leave.status === 'Pending');
+                    const pendingSwaps = swapsRes.data.filter(swap => swap.status === 'Pending Manager');
+                    
+                    // Create notifications from pending requests
+                    const leaveNotifications = pendingLeaves.map(leave => ({
+                        id: `leave-${leave._id}`,
+                        action: `Leave request from ${leave.userId?.name || 'Employee'} (${leave.type})`,
+                        user: 'Leave System',
+                        time: new Date(leave.createdAt).toLocaleString(),
+                        type: 'warning',
+                        icon: FiClock
+                    }));
+                    
+                    const swapNotifications = pendingSwaps.map(swap => ({
+                        id: `swap-${swap._id}`,
+                        action: `Shift swap request from ${swap.requestingUserId?.name || 'Employee'}`,
+                        user: 'Swap System',
+                        time: new Date(swap.createdAt).toLocaleString(),
                         type: 'info',
                         icon: FiActivity
                     }));
                     
-                    setRecentActivities(activities);
+                    const allNotifications = [...leaveNotifications, ...swapNotifications];
+                    setRecentActivities(allNotifications);
                 }
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
@@ -230,11 +243,17 @@ const Dashboard = () => {
                             <div className="p-6" style={{backgroundColor: 'white'}}>
                                 <div className="space-y-4">
                                     {recentActivities.slice(0, 3).map(activity => (
-                                        <div key={activity.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                                            <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
-                                            <p className="text-sm text-gray-700 leading-relaxed">{activity.action}</p>
+                                        <div key={activity.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                                            <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
+                                                activity.type === 'warning' ? 'bg-yellow-400' : 
+                                                activity.type === 'info' ? 'bg-blue-400' : 'bg-green-400'
+                                            }`}></div>
+                                            <div className="flex-1">
+                                                <p className="text-sm text-gray-700 leading-relaxed font-medium">{activity.action}</p>
+                                                <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+                                            </div>
                                         </div>
-                                    ))}
+                                    ))}}
                                     {recentActivities.length === 0 && (
                                         <div className="text-center py-8">
                                             <FiCheckCircle className="mx-auto text-green-500 mb-2" size={32} />
