@@ -298,7 +298,7 @@ const Swaps = () => {
                                         </tr>
                                     ) : (
                                         requests.map((req) => {
-                                            const isTargetEmployee = req.targetUserId?._id === user._id;
+                                            const isTargetEmployee = req.targetUserId?._id === user?._id;
                                             const canEmployeeRespond = isTargetEmployee && req.status === 'Pending Employee';
                                             const canManagerRespond = user?.role === 'admin' && req.status === 'Pending Manager';
                                             
