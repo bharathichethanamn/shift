@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/ShiftContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Profile from "./pages/Profile";
 import EmployeeList from "./pages/EmployeeList";
 import Schedule from "./pages/Schedule";
 import Leaves from "./pages/Leaves";
@@ -21,7 +22,7 @@ function App() {
         {/* <-- New Route --> */}
         <Route path="/leaves" element={<Leaves />} /> 
         <Route path="/swaps" element={<Swaps />} />
-        <Route path="/profile" element={<EmployeeList />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </AuthProvider>
   );
