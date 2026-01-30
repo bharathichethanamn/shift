@@ -79,11 +79,11 @@ const Dashboard = () => {
                     const notificationLeavesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/leaves`, config);
                     const notificationSwapsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/swaps`, config);
                     
-                    const pendingLeaves = notificationLeavesRes.data.filter(leave => leave.status === 'Pending');
-                    const pendingSwaps = notificationSwapsRes.data.filter(swap => swap.status === 'Pending Manager');
+                    const notificationPendingLeaves = notificationLeavesRes.data.filter(leave => leave.status === 'Pending');
+                    const notificationPendingSwaps = notificationSwapsRes.data.filter(swap => swap.status === 'Pending Manager');
                     
                     // Create notifications from pending requests
-                    const leaveNotifications = pendingLeaves.map(leave => ({
+                    const leaveNotifications = notificationPendingLeaves.map(leave => ({
                         id: `leave-${leave._id}`,
                         action: `Leave request from ${leave.userId?.name || 'Employee'} (${leave.type})`,
                         user: 'Leave System',
@@ -92,7 +92,7 @@ const Dashboard = () => {
                         icon: FiClock
                     }));
                     
-                    const swapNotifications = pendingSwaps.map(swap => ({
+                    const swapNotifications = notificationPendingSwaps.map(swap => ({
                         id: `swap-${swap._id}`,
                         action: `Shift swap request from ${swap.requestingUserId?.name || 'Employee'}`,
                         user: 'Swap System',
