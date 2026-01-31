@@ -253,7 +253,7 @@ const Dashboard = () => {
                                                 <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
                                             </div>
                                         </div>
-                                    ))}}
+                                    ))}
                                     {recentActivities.length === 0 && (
                                         <div className="text-center py-8">
                                             <FiCheckCircle className="mx-auto text-green-500 mb-2" size={32} />

@@ -2,13 +2,21 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
-        // Try local MongoDB first
-        const conn = await mongoose.connect(process.env.MONGO_URI);
-        console.log(`✅ Local MongoDB Connected: ${conn.connection.host}`);
+        // Try MongoDB Atlas first
+        const conn = await mongoose.connect(process.env.MONGO_ATLAS_URI);
+        console.log(`✅ MongoDB Atlas Connected: ${conn.connection.host}`);
     } catch (error) {
-        console.error(`❌ Local MongoDB Connection Error: ${error.message}`);
-        console.log('Make sure MongoDB is installed and running locally');
-        process.exit(1);
+        console.log(`⚠️ MongoDB Atlas unavailable, trying local...`);
+        try {
+            // Fallback to local MongoDB
+            const conn = await mongoose.connect(process.env.MONGO_URI);
+            console.log(`✅ Local MongoDB Connected: ${conn.connection.host}`);
+        } catch (localError) {
+            console.error(`❌ Both connections failed:`);
+            console.error(`Atlas: ${error.message}`);
+            console.error(`Local: ${localError.message}`);
+            process.exit(1);
+        }
     }
 };
 
